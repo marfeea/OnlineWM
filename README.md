@@ -12,6 +12,51 @@ It allows you to develop in an isolated environment, outside of the core Isaac L
 
 **Keywords:** extension, template, isaaclab
 
+## Migrated AUBO scene
+
+The AUBO workstation scene from the `Test` and `CurriculumRL` projects is now
+available as a layered, installable configuration:
+
+```text
+source/OnlineWM/OnlineWM/
+|-- configs/
+|   |-- assets.py              # external asset paths and USD prim contract
+|   |-- scene.py               # workstation/robot poses and actuator baseline
+|   |-- task.py                # four sample-bottle target poses
+|   `-- vision_diagnostics.py  # three reproducible camera views
+|-- runtime/
+|   |-- scene_access.py        # articulation/contact runtime checks
+|   `-- xform_spawner.py       # semantic station hierarchy
+`-- tasks/tcp_docking/
+    |-- static_scene_cfg.py    # workstation, target, and two AUBO robots
+    |-- dynamic_scene_cfg.py   # kinematic target and contact sensor
+    `-- vision_scene_cfg.py    # RGB/depth/normal/segmentation cameras
+```
+
+USD files remain outside the repository. The loader first checks an explicit
+path, then `ONLINEWM_ASSET_ROOT`, and finally discovers an `Asset` directory
+adjacent to the workspace. The required layout is:
+
+```text
+Asset/
+|-- AUBO_E5/AUBO_E5_Withclaw.usd
+`-- QKL-HX-300-II-00/Part/
+    |-- WorkStation/WorkStation.usd
+    `-- Reagent_01/M_Reagent_01.usd
+```
+
+Run the pure configuration checks with `python -m pytest tests/test_scene_config.py`.
+
+Run the single-environment Isaac smoke check with:
+
+```bash
+python scripts/smoke_scene.py --headless
+```
+
+This migration intentionally excludes control, reward, curriculum, and
+world-model training logic so that later environments can reuse the scene
+without inheriting either reference project's training behavior.
+
 ## Installation
 
 - Install Isaac Lab by following the [installation guide](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/index.html).

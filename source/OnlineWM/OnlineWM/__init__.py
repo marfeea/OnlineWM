@@ -3,12 +3,26 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""
-Python module serving as a project/extension template.
-"""
+"""OnlineWM Isaac Lab extension package."""
 
-# Register Gym environments.
-from .tasks import *
 
-# Register UI extensions.
-from .ui_extension_example import *
+def _missing_optional_runtime(error: ModuleNotFoundError) -> bool:
+    """Return whether an import failed only because Isaac is not running."""
+
+    module_root = (error.name or "").split(".", maxsplit=1)[0]
+    return module_root in {"carb", "gymnasium", "isaaclab", "isaaclab_tasks", "omni", "pxr"}
+
+
+# Keep task and UI auto-registration inside Isaac while allowing pure scene
+# configuration modules to be imported by lightweight validation tools.
+try:
+    from .tasks import *  # noqa: F403
+except ModuleNotFoundError as error:
+    if not _missing_optional_runtime(error):
+        raise
+
+try:
+    from .ui_extension_example import *  # noqa: F403
+except ModuleNotFoundError as error:
+    if not _missing_optional_runtime(error):
+        raise
