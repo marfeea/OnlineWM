@@ -1,0 +1,14 @@
+﻿{
+    "schema_version":  1,
+    "run_id":  "20260725_g06b",
+    "completed_at":  "2026-07-25T20:18:33.3717706+08:00",
+    "python_executable":  "D:\\Anaconda\\envs\\isaaclab\\python.exe",
+    "python_no_user_site":  true,
+    "r2dreamer_root":  "D:\\Software\\R2-Dreamer",
+    "r2dreamer_commit":  "546e4fab8146ea4b14e1d7726bbc1a8a1d50322f",
+    "onlinewm_root":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\source\\OnlineWM",
+    "dependency_strategy":  "Use the PyTorch-2.7-compatible TensorDict 0.8.3/TorchRL 0.8.1 pair, restore Isaac Sim\u0027s packaging 23.0 pin, and editable-install R2-Dreamer plus OnlineWM with --no-deps to preserve the frozen Torch/Isaac runtime.",
+    "pip_check_before_exit_code":  1,
+    "pip_check_after_exit_code":  1,
+    "probe":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p0_runtime\\metrics\\g06_probe_20260725_g06b.json"
+}

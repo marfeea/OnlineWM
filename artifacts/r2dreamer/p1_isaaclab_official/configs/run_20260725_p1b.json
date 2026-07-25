@@ -1,0 +1,32 @@
+﻿{
+    "schema_version":  1,
+    "run_id":  "20260725_p1b",
+    "started_at":  "2026-07-25T19:04:29.1574412+08:00",
+    "conda_environment":  "isaaclab",
+    "python_no_user_site":  true,
+    "isaaclab_root":  "D:\\Software\\Isaac Install\\IsaacLab",
+    "official_train":  "D:\\Software\\Isaac Install\\IsaacLab\\scripts\\reinforcement_learning\\rl_games\\train.py",
+    "official_play":  "D:\\Software\\Isaac Install\\IsaacLab\\scripts\\reinforcement_learning\\rl_games\\play.py",
+    "task":  "Isaac-Cartpole-Direct-v0",
+    "num_envs":  16,
+    "probe_steps":  640,
+    "max_iterations":  150,
+    "minibatch_size":  512,
+    "repetitions":  3,
+    "training_command":  [
+                             "conda",
+                             "run",
+                             "--name",
+                             "isaaclab",
+                             "python",
+                             "D:\\Software\\Isaac Install\\IsaacLab\\scripts\\reinforcement_learning\\rl_games\\train.py",
+                             "--task",
+                             "Isaac-Cartpole-Direct-v0",
+                             "--num_envs",
+                             "16",
+                             "--headless",
+                             "--max_iterations",
+                             "150",
+                             "agent.params.config.minibatch_size=512"
+                         ]
+}

@@ -2,7 +2,8 @@
 
 > 冻结时间：2026-07-25 18:22:25 +08:00  
 > P0 验收包：`artifacts/r2dreamer/p0_runtime/`  
-> 适用范围：P1 Isaac Lab 官方训练 smoke；P2/P5 仍受下文入口 Gate 限制。
+> 适用范围：P1 Isaac Lab 官方训练，以及 2026-07-25 已补齐的 P0-G06 / P2、P5 入口 Gate。
+> G06 补充验收：`artifacts/r2dreamer/p0_runtime/acceptance_g06_20260725.md`
 
 ## 1. 唯一运行入口
 
@@ -57,27 +58,50 @@ conda run --name isaaclab python <SCRIPT> <ARGS>
 | Isaac Lab Tasks | 0.11.14 |
 | RL-Games | 1.6.5 |
 | Gymnasium | 1.2.1 |
-| TensorDict | 未安装；P2 前补齐 |
-| R2-Dreamer | 未安装；P2 前补齐并冻结 commit |
-| OnlineWM distribution | 未 editable-install；仓库脚本通过 `source/OnlineWM` bootstrap 导入 |
+| TensorDict | 0.8.3 |
+| TorchRL | 0.8.1；Windows 原生扩展加载通过 |
+| R2-Dreamer | 0.1.0；editable install；commit `546e4fab8146ea4b14e1d7726bbc1a8a1d50322f` |
+| OnlineWM distribution | 0.1.0；editable install 自 `source/OnlineWM` |
+| packaging | 23.0；保持 Isaac Sim 5.1.0.0 的精确要求 |
 
 完整环境快照：
 
 - `artifacts/r2dreamer/p0_runtime/configs/conda-history.yml`
 - `artifacts/r2dreamer/p0_runtime/configs/requirements.lock.txt`
 - `artifacts/r2dreamer/p0_runtime/metrics/runtime_probe.json`
+- `artifacts/r2dreamer/p0_runtime/configs/requirements_g06_after_20260725_g06c.txt`
+- `artifacts/r2dreamer/p0_runtime/metrics/g06_probe_20260725_g06c.json`
 
 ## 4. 代码版本与 dirty 状态
 
 | 仓库 | 路径 | commit | 状态 |
 |---|---|---|---|
-| OnlineWM | `D:\Project\S2R\OnlineWM\OnlineWM` | `b15613ac8907188ad1b51c38170c190b51abfe25` | dirty；包含路线文档的既有修改和本次 P0 文件 |
+| OnlineWM | `D:\Project\S2R\OnlineWM\OnlineWM` | P0 基线 `b15613ac8907188ad1b51c38170c190b51abfe25`；G06 `01bd31b15c986737e9f5b123af9f7699faee1737` | dirty；G06 以 `source/OnlineWM` editable install |
 | Isaac Lab | `D:\Software\Isaac Install\IsaacLab` | `f4aa17f87e2e5db5484f0b5974918573e8918ce2` | `v2.3.2-13-gf4aa17f87e2`；dirty，存在未跟踪文件 `2.7.0+cu128` |
-| R2-Dreamer | 未安装 | 未冻结 | P2 入口阻塞项 |
+| R2-Dreamer | `D:\Software\R2-Dreamer` | `546e4fab8146ea4b14e1d7726bbc1a8a1d50322f` | detached、clean；editable install |
 
 Git 原始输出见 `logs/onlinewm_git.txt` 和 `logs/isaaclab_git.txt`。
 P1 的运行必须继续使用上表 Isaac Lab commit；升级、清理或切换分支后必须重新执行 P0
 采集器。
+
+### 4.1 P0-G06 兼容覆盖
+
+R2-Dreamer 上游 0.1.0 精确声明 Torch 2.8.0、TorchRL 0.9.2 与 TensorDict 0.9.1；
+TorchRL 0.9.2 的 Windows 原生扩展不能由当前 Torch 2.7 加载。为不破坏已经正式验收的
+P1 Isaac 运行时，G06 固定使用 TorchRL 0.8.1 / TensorDict 0.8.3，并对
+R2-Dreamer 与 OnlineWM 执行 `--no-deps` editable install。最终无头探针验证了
+R2-Dreamer 核心模块、TensorDict 运算、TorchRL ReplayBuffer/原生扩展，以及
+OnlineWM 无 bootstrap 导入和任务注册。
+
+安装与复验入口：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass `
+  -File scripts\p0\install_g06.ps1 -RunId <UNIQUE_RUN_ID>
+```
+
+该兼容覆盖满足 P0-G06 的安装/导入入口标准；R2-Dreamer 的正式训练兼容性由 P2 Gate
+继续验收。
 
 ## 5. P1 冻结 smoke 命令
 
@@ -97,6 +121,29 @@ conda run --name isaaclab python `
 该工作目录使 RL-Games 输出落入
 `artifacts/r2dreamer/p1_isaaclab_official/logs/rl_games/`。P1 首次运行前创建标准验收目录，
 并把完整终端输出另存为带时间戳的文本日志。
+
+### 5.1 P1 实测配置补充
+
+P1 在冻结运行时中实测发现，16 个环境和官方 `horizon_length=32` 形成的 rollout batch
+为 512，不能使用上游 YAML 的 `minibatch_size=16384`；同时 RL-Games 1.6.5 默认启用
+`torch.compile`，但该 Windows 运行时没有可用 Triton。正式 P1 命令因此固定为：
+
+```powershell
+$env:PYTHONNOUSERSITE = "1"
+Set-Location "D:\Project\S2R\OnlineWM\OnlineWM\artifacts\r2dreamer\p1_isaaclab_official"
+conda run --name isaaclab python `
+  "D:\Software\Isaac Install\IsaacLab\scripts\reinforcement_learning\rl_games\train.py" `
+  --task Isaac-Cartpole-Direct-v0 `
+  --num_envs 16 `
+  --headless `
+  --max_iterations 150 `
+  agent.params.config.minibatch_size=512 `
+  +agent.params.config.torch_compile=false
+```
+
+上述两个覆盖属于训练配置兼容修正，不改变 P0 冻结的解释器、Isaac Sim/Lab、PyTorch、
+CUDA 或 RL-Games 版本。正式证据和三次连续运行记录见
+`artifacts/r2dreamer/p1_isaaclab_official/`。
 
 ## 6. 重建与复核
 

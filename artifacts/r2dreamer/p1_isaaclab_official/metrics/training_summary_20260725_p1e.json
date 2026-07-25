@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-25T19:21:25.432154+08:00",
+  "expected_runs": 3,
+  "completed_runs": 3,
+  "runs": [
+    {
+      "run": "2026-07-25_19-13-51",
+      "path": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p1_isaaclab_official\\logs\\rl_games\\cartpole_direct\\2026-07-25_19-13-51",
+      "tag": "rewards/iter",
+      "samples": 148,
+      "first_step": 1,
+      "last_step": 148,
+      "window": 10,
+      "initial_median": 6.235330820083618,
+      "final_median": 255.2197723388672,
+      "absolute_improvement": 248.98444151878357,
+      "relative_improvement": 39.9312319912233,
+      "peak_return": 256.62335205078125
+    },
+    {
+      "run": "2026-07-25_19-15-27",
+      "path": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p1_isaaclab_official\\logs\\rl_games\\cartpole_direct\\2026-07-25_19-15-27",
+      "tag": "rewards/iter",
+      "samples": 148,
+      "first_step": 1,
+      "last_step": 148,
+      "window": 10,
+      "initial_median": 6.235330820083618,
+      "final_median": 255.2197723388672,
+      "absolute_improvement": 248.98444151878357,
+      "relative_improvement": 39.9312319912233,
+      "peak_return": 256.62335205078125
+    },
+    {
+      "run": "2026-07-25_19-17-00",
+      "path": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p1_isaaclab_official\\logs\\rl_games\\cartpole_direct\\2026-07-25_19-17-00",
+      "tag": "rewards/iter",
+      "samples": 148,
+      "first_step": 1,
+      "last_step": 148,
+      "window": 10,
+      "initial_median": 6.235330820083618,
+      "final_median": 255.2197723388672,
+      "absolute_improvement": 248.98444151878357,
+      "relative_improvement": 39.9312319912233,
+      "peak_return": 256.62335205078125
+    }
+  ],
+  "aggregate": {
+    "median_relative_improvement": 39.9312319912233,
+    "runs_with_positive_improvement": 3
+  },
+  "pass": true
+}

@@ -1,0 +1,30 @@
+﻿{
+    "schema_version":  1,
+    "run_id":  "20260725_g06a",
+    "completed_at":  "2026-07-25T20:13:23.1506418+08:00",
+    "python_executable":  "D:\\Anaconda\\envs\\isaaclab\\python.exe",
+    "python_no_user_site":  true,
+    "r2dreamer_root":  "D:\\Software\\R2-Dreamer",
+    "r2dreamer_commit":  "546e4fab8146ea4b14e1d7726bbc1a8a1d50322f",
+    "onlinewm_root":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\source\\OnlineWM",
+    "dependency_strategy":  "Install TensorDict/TorchRL/Ruamel; editable-install R2-Dreamer and OnlineWM with --no-deps to preserve frozen Torch/Isaac runtime.",
+    "pip_check_before_exit_code":  [
+                                       "isaacsim-core 5.1.0.0 requires torchaudio, which is not installed.",
+                                       "fastapi 0.115.7 has requirement starlette\u003c0.46.0,\u003e=0.40.0, but you have starlette 0.49.1.",
+                                       "wheel 0.46.3 has requirement packaging\u003e=24.0, but you have packaging 23.0.",
+                                       1
+                                   ],
+    "pip_check_after_exit_code":  [
+                                      "isaacsim-core 5.1.0.0 requires torchaudio, which is not installed.",
+                                      "fastapi 0.115.7 has requirement starlette\u003c0.46.0,\u003e=0.40.0, but you have starlette 0.49.1.",
+                                      "isaaclab-rl 0.5.0 has requirement packaging\u003c24, but you have packaging 25.0.",
+                                      "isaacsim-core 5.1.0.0 has requirement packaging==23.0, but you have packaging 25.0.",
+                                      "r2dreamer 0.1.0 has requirement einops==0.3.0, but you have einops 0.8.2.",
+                                      "r2dreamer 0.1.0 has requirement gymnasium==1.2.0, but you have gymnasium 1.2.1.",
+                                      "r2dreamer 0.1.0 has requirement moviepy==1.0.3, but you have moviepy 2.2.1.",
+                                      "r2dreamer 0.1.0 has requirement setuptools==77.0.3, but you have setuptools 80.10.2.",
+                                      "r2dreamer 0.1.0 has requirement torch==2.8.0, but you have torch 2.7.0+cu128.",
+                                      1
+                                  ],
+    "probe":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p0_runtime\\metrics\\g06_probe_20260725_g06a.json"
+}

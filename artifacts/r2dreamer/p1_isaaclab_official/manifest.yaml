@@ -1,0 +1,105 @@
+stage: p1_isaaclab_official
+status: PASS
+accepted_at: "2026-07-25T19:32:00+08:00"
+formal_run_id: 20260725_p1e
+scope:
+  task: Isaac-Cartpole-Direct-v0
+  backend: RL-Games
+  num_envs: 16
+  probe_steps: 640
+  training_epochs: 150
+  repetitions: 3
+  resume_target_epoch: 155
+runtime:
+  conda_environment: isaaclab
+  python_executable: 'D:\Anaconda\envs\isaaclab\python.exe'
+  python_version: 3.11.15
+  python_no_user_site: true
+  isaac_sim: 5.1.0.0
+  isaac_lab_version_file: 2.3.2
+  rl_games: 1.6.5
+  torch: 2.7.0+cu128
+  torch_cuda: "12.8"
+  gpu: NVIDIA GeForce RTX 4060
+  nvidia_driver: "591.86"
+repositories:
+  onlinewm:
+    path: 'D:\Project\S2R\OnlineWM\OnlineWM'
+    commit: 01bd31b15c986737e9f5b123af9f7699faee1737
+    dirty: true
+  isaac_lab:
+    path: 'D:\Software\Isaac Install\IsaacLab'
+    commit: f4aa17f87e2e5db5484f0b5974918573e8918ce2
+    describe: v2.3.2-13-gf4aa17f87e2
+    dirty: true
+working_directory: 'D:\Project\S2R\OnlineWM\OnlineWM\artifacts\r2dreamer\p1_isaaclab_official'
+configuration:
+  horizon_length: 32
+  official_minibatch_size: 16384
+  accepted_minibatch_size: 512
+  torch_compile: false
+  seed: 42
+commands:
+  probe: >-
+    conda run --name isaaclab python scripts/p1/env_probe.py
+    --task Isaac-Cartpole-Direct-v0 --num_envs 16 --steps 640
+    --output artifacts/r2dreamer/p1_isaaclab_official/metrics/environment_probe_20260725_p1e.json
+    --headless
+  training: >-
+    conda run --name isaaclab python
+    "D:\Software\Isaac Install\IsaacLab\scripts\reinforcement_learning\rl_games\train.py"
+    --task Isaac-Cartpole-Direct-v0 --num_envs 16 --headless --max_iterations 150
+    agent.params.config.minibatch_size=512 +agent.params.config.torch_compile=false
+  resume: >-
+    conda run --name isaaclab python
+    "D:\Software\Isaac Install\IsaacLab\scripts\reinforcement_learning\rl_games\train.py"
+    --task Isaac-Cartpole-Direct-v0 --num_envs 16 --headless --max_iterations 155
+    --checkpoint checkpoints/cartpole_20260725_p1e.pth
+    agent.params.config.minibatch_size=512 +agent.params.config.torch_compile=false
+  play: >-
+    conda run --name isaaclab python
+    "D:\Software\Isaac Install\IsaacLab\scripts\reinforcement_learning\rl_games\play.py"
+    --task Isaac-Cartpole-Direct-v0 --num_envs 1 --headless --video
+    --video_length 300 --checkpoint checkpoints/cartpole_20260725_p1e.pth
+training_runs:
+  - directory: logs/rl_games/cartpole_direct/2026-07-25_19-13-51
+    console: logs/train_20260725_p1e_run1.txt
+    training_seconds: 75.99
+  - directory: logs/rl_games/cartpole_direct/2026-07-25_19-15-27
+    console: logs/train_20260725_p1e_run2.txt
+    training_seconds: 73.73
+  - directory: logs/rl_games/cartpole_direct/2026-07-25_19-17-00
+    console: logs/train_20260725_p1e_run3.txt
+    training_seconds: 76.78
+artifacts:
+  environment_probe: metrics/environment_probe_20260725_p1e.json
+  raw_episode_returns: metrics/episode_returns_20260725_p1e.csv
+  training_summary: metrics/training_summary_20260725_p1e.json
+  learning_curve: plots/episode_returns_20260725_p1e.svg
+  checkpoint:
+    path: checkpoints/cartpole_20260725_p1e.pth
+    bytes: 31253
+    sha256: c37ae4de00bc0df8fb6d5ce702f317b08e6c15ff0ca584e830f8391d30597f7c
+  resume_log: logs/resume_20260725_p1e.txt
+  fixed_policy_video:
+    path: videos/fixed_policy_20260725_p1e.mp4
+    bytes: 439584
+    sha256: 5343e0fc39416147ca5a2bd16e85c481a87f2afc4672cdbd1898a751eb01fa3b
+    decoded_frames: 299
+    resolution: 1280x720
+    fps: 60.0
+  play_log: logs/play_20260725_p1e.txt
+  validation: tests/acceptance_validation_20260725_p1e.json
+  hashes: tests/sha256.csv
+gates:
+  P1-G01: PASS
+  P1-G02: PASS
+  P1-G03: PASS
+  P1-G04: PASS
+  P1-G05: PASS
+  checkpoint_resume: PASS
+  fixed_policy_video: PASS
+next_stage_gate:
+  p2_allowed_by_p1: true
+  p0_g06_p2_satisfied: false
+  note: P2 前仍需安装并冻结 R2-Dreamer/TensorDict，并完成同一解释器导入 smoke。
