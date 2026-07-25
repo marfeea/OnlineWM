@@ -1,0 +1,7 @@
+﻿collected_at=2026-07-25T18:28:58.4810993+08:00
+project_root=D:\Project\S2R\OnlineWM\OnlineWM
+conda_environment=isaaclab
+isaaclab_root=D:\Software\Isaac Install\IsaacLab
+powershell=5.1.26100.8655
+
+Microsoft Windows [Version 10.0.26200.8655]

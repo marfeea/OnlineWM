@@ -58,6 +58,10 @@ _build
 **/logs/*
 **/recordings/*
 
+# Keep text evidence from staged acceptance packages.
+!artifacts/r2dreamer/**/logs/
+!artifacts/r2dreamer/**/logs/*.txt
+
 # Pre-Trained Checkpoints
 /.pretrained_checkpoints/
 

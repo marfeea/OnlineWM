@@ -1,5 +1,9 @@
 # OnlineWM Anaconda 环境配置
 
+> P0 实机冻结结果以 `doc/runtime_versions.md` 为准。本文保留为全新环境重建说明；
+> 当前 P1 已验收的唯一入口是 `isaaclab` Conda 环境，不应与尚未完成仿真依赖安装的
+> `onlinewm` 环境混用。
+
 ## 1. 推荐基线
 
 本配置面向当前 Windows 项目和现有 AUBO 场景，采用一套固定兼容基线，而不是追逐各组件的最新版本。

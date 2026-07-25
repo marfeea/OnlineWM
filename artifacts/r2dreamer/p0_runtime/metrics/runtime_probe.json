@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "python": {
+    "executable": "D:\\Anaconda\\envs\\isaaclab\\python.exe",
+    "version": "3.11.15 | packaged by Anaconda, Inc. | (main, Mar 11 2026, 17:12:15) [MSC v.1942 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "user_site_enabled": false
+  },
+  "packages": {
+    "torch": "2.7.0+cu128",
+    "torchvision": "0.22.0+cu128",
+    "isaac_sim": "5.1.0.0",
+    "isaac_lab_distribution": "0.54.3",
+    "isaac_lab_tasks_distribution": "0.11.14",
+    "rl_games": "1.6.5",
+    "gymnasium": "1.2.1",
+    "tensordict": null,
+    "onlinewm": null,
+    "r2dreamer": null
+  },
+  "modules": {
+    "isaaclab": "D:\\Software\\Isaac Install\\IsaacLab\\source\\isaaclab\\isaaclab\\__init__.py",
+    "isaaclab_tasks": "D:\\Software\\Isaac Install\\IsaacLab\\source\\isaaclab_tasks\\isaaclab_tasks\\__init__.py",
+    "rl_games": "D:\\Anaconda\\envs\\isaaclab\\Lib\\site-packages\\rl_games\\__init__.py",
+    "onlinewm": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\source\\OnlineWM\\OnlineWM\\__init__.py"
+  },
+  "cuda": {
+    "available": true,
+    "torch_runtime": "12.8",
+    "device_index": 0,
+    "device_name": "NVIDIA GeForce RTX 4060",
+    "device_capability": [
+      8,
+      9
+    ]
+  },
+  "official_task": {
+    "id": "Isaac-Cartpole-Direct-v0",
+    "registered": true,
+    "entry_point": "isaaclab_tasks.direct.cartpole.cartpole_env:CartpoleEnv"
+  }
+}

@@ -1,0 +1,55 @@
+stage: p0_runtime
+status: PASS
+accepted_at: "2026-07-25T18:22:25+08:00"
+p1_entry_allowed: true
+runtime:
+  conda_environment: isaaclab
+  python_executable: 'D:\Anaconda\envs\isaaclab\python.exe'
+  python_version: 3.11.15
+  python_no_user_site: true
+  os: Windows 11 Pro 25H2 build 26200
+  gpu: NVIDIA GeForce RTX 4060
+  gpu_uuid: GPU-e04a936b-14ad-b9f5-396a-51d4a215a5e8
+  nvidia_driver: "591.86"
+  torch: 2.7.0+cu128
+  torch_cuda: "12.8"
+  torchvision: 0.22.0+cu128
+  isaac_sim: 5.1.0.0
+  isaac_lab_version_file: 2.3.2
+  isaac_lab_distribution: 0.54.3
+  isaac_lab_tasks: 0.11.14
+  rl_games: 1.6.5
+  gymnasium: 1.2.1
+repositories:
+  onlinewm:
+    path: 'D:\Project\S2R\OnlineWM\OnlineWM'
+    remote: https://github.com/marfeea/OnlineWM.git
+    commit: b15613ac8907188ad1b51c38170c190b51abfe25
+    dirty: true
+  isaac_lab:
+    path: 'D:\Software\Isaac Install\IsaacLab'
+    remote: https://github.com/isaac-sim/IsaacLab.git
+    commit: f4aa17f87e2e5db5484f0b5974918573e8918ce2
+    describe: v2.3.2-13-gf4aa17f87e2
+    dirty: true
+  r2dreamer:
+    installed: false
+    commit: null
+gates:
+  P0-G01: PASS
+  P0-G02: PASS
+  P0-G03: PASS
+  P0-G04: PASS
+  P0-G05: PASS
+  P0-G06-P2: BLOCKED_NOT_DUE
+  P0-G06-P5: BLOCKED_NOT_DUE
+evidence:
+  runtime_probe: metrics/runtime_probe.json
+  host: logs/host.txt
+  gpu: logs/gpu.txt
+  import_smoke: logs/isaac_import_smoke.txt
+  onlinewm_git: logs/onlinewm_git.txt
+  isaaclab_git: logs/isaaclab_git.txt
+  conda_history: configs/conda-history.yml
+  pip_lock: configs/requirements.lock.txt
+  hashes: tests/sha256.csv

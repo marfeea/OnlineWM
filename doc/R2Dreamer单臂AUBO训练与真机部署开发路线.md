@@ -1,6 +1,6 @@
 # R2-Dreamer 单臂 AUBO 训练与真机部署开发路线
 
-> 文档版本：v3.1
+> 文档版本：v3.2
 > 基线日期：2026-07-25
 > 当前对象：官方 IsaacLab/R2-Dreamer 验证、本地 AUBO 单臂任务、仿真训练、sim-to-real 与真机部署
 > 最终目标：训练一套可在单台 AUBO E5 上执行目标任务的 R2-Dreamer 策略，并形成可重复、可回退的真机验证证据
@@ -137,7 +137,7 @@
 
 | 阶段 | 目标 | 前置 | 状态 | 完成证据 |
 |---|---|---|---|---|
-| P0 | 固化运行时与代码版本 | 无 | ⬜ | 版本清单、commit、解释器与导入日志 |
+| P0 | 固化运行时与代码版本 | 无 | ✅ | 版本清单、commit、解释器与导入日志 |
 | P1 | 运行 Isaac Lab 官方训练示例 | P0 | ⬜ | 官方任务曲线、checkpoint、重复运行日志 |
 | P2 | 运行 R2-Dreamer 官方状态链路 | P1 | ⬜ | replay/RSSM/actor-critic 日志、checkpoint 恢复 |
 | P3 | 运行 R2-Dreamer 官方视觉链路 | P2 | ⬜ | RGB、R2 loss、训练曲线、性能与回放证据 |
@@ -169,11 +169,14 @@ R2-Dreamer 官方仓库当前主要在 Ubuntu 24.04、Python 3.11 环境测试�
 
 | Gate | 通过标准 |
 |---|---|
-| P0-G01 | 唯一解释器能够导入 Isaac Lab、R2-Dreamer 和 OnlineWM |
+| P0-G01 | P1 使用的唯一解释器能够导入 Isaac Lab、Isaac Lab Tasks 和选定的官方训练后端 |
 | P0-G02 | CUDA 可用，PyTorch 和 Isaac Sim 指向预期 GPU |
 | P0-G03 | 所有仓库 commit 和 dirty 状态已记录 |
 | P0-G04 | 依赖安装可以从空终端重复执行 |
 | P0-G05 | 版本信息写入 `doc/runtime_versions.md` |
+| P0-G06 | 进入 P2 前，R2-Dreamer 能在与 Isaac Lab 兼容的解释器中导入；进入 P5 前，同一运行时能够导入 OnlineWM |
+
+P1 不应被尚未安装的 R2-Dreamer 或 OnlineWM 阻塞，但必须先满足 P0-G01—P0-G05。P0-G06 是 P2 和 P5 的入口 Gate，不得推迟到相应阶段训练已经开始之后。
 
 ## 6. P1：Isaac Lab 官方训练示例
 
@@ -184,6 +187,18 @@ R2-Dreamer 官方仓库当前主要在 Ubuntu 24.04、Python 3.11 环境测试�
 ### 6.2 推荐任务
 
 优先选择 `Isaac-Cartpole-Direct-v0`。实际命令以固化版本的官方训练入口为准。
+
+当前版本已确认 RL-Games 配置和官方训练脚本存在，可使用以下命令模板：
+
+```powershell
+conda run -n <ISAAC_ENV> python "<ISAACLAB_ROOT>\scripts\reinforcement_learning\rl_games\train.py" `
+  --task Isaac-Cartpole-Direct-v0 `
+  --num_envs 16 `
+  --headless `
+  --max_iterations 5
+```
+
+该命令只用于首次 smoke。通过环境创建、日志和 checkpoint 检查后，再恢复官方迭代预算。`<ISAAC_ENV>`、`<ISAACLAB_ROOT>`、工作目录和日志归档命令必须在 P0 中替换为冻结值。
 
 ### 6.3 Gate
 
@@ -541,7 +556,21 @@ R2-Dreamer 的策略观测由 `policy` 与 `image` 联合构成。`policy` 不�
 
 不得通过扩大训练预算掩盖环境、任务或真机接口错误。
 
-## 16. 交付物
+## 16. 阶段验收物与验收目录
+
+### 16.1 验收形式
+
+采用“一个阶段一个验收包”的方式。目录中的原始证据是验收事实来源；聊天记录、口头结论和孤立截图不能单独作为验收依据。
+
+每个阶段目录必须包含 `acceptance.md`，并采用以下结论之一：
+
+- `PASS`：本阶段全部强制 Gate 已通过，可以进入下一阶段；
+- `FAIL`：已完成验收但存在未通过 Gate，修复后必须重新验收；
+- `BLOCKED`：缺少外部资料、设备或前置条件，尚不能形成通过/失败结论。
+
+项目级 `acceptance_index.md` 汇总所有阶段的状态、时间、代码版本、验收报告和遗留问题。
+
+### 16.2 总体目录
 
 ```text
 doc/
@@ -555,6 +584,8 @@ reference/
   papers/
 artifacts/
   r2dreamer/
+    acceptance_index.md
+    p0_runtime/
     p1_isaaclab_official/
     p2_official_proprio/
     p3_official_vision/
@@ -564,7 +595,95 @@ artifacts/
     p7_aubo_vision/
     p8_sim2real/
     p9_real_robot/
+    qa/
 ```
+
+现有开发目录若尚不存在，应在对应阶段首次执行前建立。任何阶段不得把证据散落在未登记的临时目录中。
+
+### 16.3 每个阶段的标准结构
+
+```text
+pX_stage/
+  acceptance.md
+  manifest.yaml
+  configs/
+  logs/
+  metrics/
+  plots/
+  tests/
+  videos/
+  checkpoints/
+  failures.md
+```
+
+各文件和目录含义如下：
+
+| 验收物 | 形式 | 要求 |
+|---|---|---|
+| `acceptance.md` | Markdown | 阶段目标、范围、Gate 检查表、证据链接、结论和遗留问题 |
+| `manifest.yaml` | YAML | OnlineWM/R2-Dreamer/Isaac Lab commit、dirty 状态、解释器、配置、数据、模型和运行命令索引 |
+| `configs/` | YAML/JSON/TOML | 实际运行配置快照，不只保存默认配置 |
+| `logs/` | TXT/JSONL | 完整终端、训练、评估和异常日志 |
+| `metrics/` | JSON/CSV/NPZ | 机器可读的原始指标和统计结果 |
+| `plots/` | PNG/SVG | 由 `metrics/` 生成的曲线、分布和对比图 |
+| `tests/` | TXT/XML/JSON | 测试命令、测试报告和随机/边界条件记录 |
+| `videos/` | MP4 | 固定策略、环境交互或真机试验录像 |
+| `checkpoints/` | 模型或索引文件 | checkpoint 本体，或存储路径、大小、格式和 SHA256 |
+| `failures.md` | Markdown | 失败样本、复现条件、原因分类、修复状态和剩余风险 |
+
+`acceptance.md` 至少记录：
+
+1. 阶段目标与验收范围；
+2. 输入代码、依赖、配置、数据和模型版本；
+3. 每项 Gate 的 `PASS/FAIL/BLOCKED` 状态；
+4. 每项 Gate 对应的具体证据文件；
+5. 阶段总评和是否允许进入下一阶段；
+6. 已知限制、未解决问题和重新验收条件。
+
+大型 checkpoint 和真机原始数据可以不提交到 Git，但必须在 `manifest.yaml` 中记录可访问位置、文件大小和 SHA256。不得用同名文件覆盖既有正式验收物。
+
+### 16.4 各阶段核心验收物
+
+| 阶段 | 验收目录 | 核心验收物 |
+|---|---|---|
+| P0 运行时 | `p0_runtime/` | Windows/GPU/驱动、Python/PyTorch/CUDA、Isaac Sim/Lab、OnlineWM/R2-Dreamer 版本；Git 状态；依赖快照；导入 smoke 日志 |
+| P1 Isaac Lab 官方训练 | `p1_isaaclab_official/` | 官方任务配置、训练日志、episode 曲线、checkpoint、恢复记录、连续三次运行记录和固定策略视频 |
+| P2 官方状态链路 | `p2_official_proprio/` | replay 连续性检查、RSSM/actor/critic 更新证据、loss 曲线、动作统计和 checkpoint 恢复测试 |
+| P3 官方视觉链路 | `p3_official_vision/` | RGB 样本、shape/dtype 检查、R2 loss、梯度、显存/FPS、checkpoint 和固定策略视频 |
+| P4 AUBO 任务协议 | `p4_aubo_task/` | 抓取抬升状态机、动作后端、联合观测、奖励、终止、成功、初始分布、相机和安全协议 |
+| P5 本地 AUBO 环境 | `p5_aubo_env/` | Gym 注册、zero/random/scripted 测试、动态采样瓶交互、异步 reset、4 Hz 插值、吞吐和环境视频 |
+| P6 AUBO 状态训练 | `p6_aubo_proprio/` | 训练配置、checkpoint、学习曲线、zero/random 对照、评估轨迹和失败分类 |
+| P7 AUBO 视觉训练 | `p7_aubo_vision/` | 最终联合输入配置、冻结 checkpoint、成功率、训练曲线、评估视频、视觉捷径和分布外分析 |
+| P8 sim-to-real | `p8_sim2real/` | 相机/TCP 标定、SDK 版本与接口映射、时延测试、shadow mode、安全检查表和回退演练 |
+| P9 AUBO 真机 | `p9_real_robot/` | 每次试验的同步视频、观测、机器人状态、策略动作、实际命令、安全事件、汇总指标和部署报告 |
+| QA 全阶段 | `qa/` | 测试矩阵、Gate—证据追踪表、配置完整性、失效链接、文件哈希和跨阶段回归检查 |
+
+### 16.5 真机单次试验目录
+
+P9 中每次试验必须使用唯一编号，禁止覆盖：
+
+```text
+p9_real_robot/
+  trials/
+    trial_0001/
+      trial.yaml
+      camera.mp4
+      observations.npz
+      robot_state.csv
+      policy_actions.csv
+      executed_commands.csv
+      safety_events.csv
+      result.md
+```
+
+其中：
+
+- `trial.yaml` 记录策略、控制后端、SDK、相机标定、初始条件、操作者和时间；
+- 观测、机器人状态、策略动作、实际命令和安全事件必须包含可对齐的时间戳；
+- `result.md` 记录成功/失败、完成时间、人工接管、急停、异常和关联视频；
+- 汇总结果必须能够反查到任意一次试验的原始输入和实际执行命令。
+
+### 16.6 最低归档要求
 
 训练与部署至少归档：
 
@@ -613,3 +732,4 @@ artifacts/
 | 2026-07-25 | v2.0 | 曾将本地机器人和真机接入移入未来计划 |
 | 2026-07-25 | v3.0 | 纠正范围：当前目标改为 AUBO 单臂策略训练与真机部署；仅多臂/多智能体保留为未来计划 |
 | 2026-07-25 | v3.1 | 冻结采样瓶抓取抬升任务、第一台 AUBO、联合输入、统一相机与 4 Hz 控制基线；保留关节空间和 TCP 增量控制后端，并建立外部资料入口 |
+| 2026-07-25 | v3.2 | 增加统一阶段验收包、P0—P9/QA 验收目录、阶段核心验收物和真机单次试验证据规范；明确 P1 与后续 R2-Dreamer/OnlineWM 运行时 Gate，并补充 RL-Games smoke 命令模板 |
