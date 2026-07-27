@@ -1,0 +1,22 @@
+﻿{
+    "schema_version":  1,
+    "checked_at":  "2026-07-27T13:44:53.9932905+08:00",
+    "process_id":  27936,
+    "expected_steps":  10000,
+    "max_logged_step":  9919,
+    "completion_evidence":  "latest.pt is saved only after OnlineTrainer.begin returns at env.steps",
+    "training_metric_rows":  1,
+    "episode_metric_rows":  109,
+    "checkpoint":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p2_official_proprio\\official_upstream_10000_20260725_run2\\latest.pt",
+    "checks":  {
+                   "expected_steps_configured":  true,
+                   "training_loop_completed":  true,
+                   "training_metrics_present":  true,
+                   "episode_metrics_present":  true,
+                   "checkpoint_present":  true,
+                   "traceback_absent":  true,
+                   "non_finite_log_marker_absent":  true
+               },
+    "pass":  true,
+    "status":  "PASS"
+}

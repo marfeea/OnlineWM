@@ -1,0 +1,98 @@
+schema_version: 1
+phase: P2
+status: IN_PROGRESS
+status_reason: >-
+  The roadmap 10,000-step upstream official smoke and the reduced P2-G01
+  through P2-G06 gate smoke passed. Full 510K-budget training remains pending.
+collected_at: "2026-07-27T13:44:53+08:00"
+
+repositories:
+  onlinewm:
+    root: "D:\\Project\\S2R\\OnlineWM\\OnlineWM"
+    commit: "2d64fb6"
+    dirty_during_acceptance: true
+  r2dreamer:
+    root: "D:\\Software\\R2-Dreamer"
+    commit: "546e4fab8146ea4b14e1d7726bbc1a8a1d50322f"
+    dirty_during_acceptance: false
+
+runtime:
+  python: "D:\\Anaconda\\envs\\isaaclab\\python.exe"
+  python_no_user_site: true
+  device: "cuda:0"
+  gpu: "NVIDIA GeForce RTX 4060"
+  reduced_gate_numerical_mode: float32_updates_no_grad_scaling
+  official_smoke_numerical_mode: upstream_amp
+
+accepted_runs:
+  official_10000:
+    logdir: official_upstream_10000_20260725_run2
+    configured_env_steps: 10000
+    max_logged_event_step: 9919
+    completion_evidence: latest.pt saved after OnlineTrainer.begin returned
+    env_num: 4
+    batch_size: 16
+    batch_length: 64
+    train_ratio: 512
+    model: size12M
+    checkpoint: official_upstream_10000_20260725_run2/latest.pt
+    checkpoint_bytes: 118582504
+    elapsed: "12:43:58"
+  initial:
+    logdir: smoke_initial_20260725
+    env_steps: 320
+    env_num: 4
+    batch_size: 2
+    batch_length: 8
+    train_ratio: 4
+    updates: 70
+    completed_episodes: 8
+    checkpoint: checkpoints/smoke_initial_20260725.pt
+  resume:
+    logdir: smoke_resume_20260725
+    env_steps: 242
+    env_num: 4
+    batch_size: 2
+    batch_length: 8
+    train_ratio: 4
+    updates: 50
+    checkpoint: checkpoints/smoke_resume_20260725.pt
+
+adapters:
+  strict_episode_replay: true
+  action_clip: [-1.0, 1.0]
+  checkpoint_agent_and_optimizer: true
+  checkpoint_digest_verification: true
+  traceback_scan_required: true
+
+gates:
+  P2-G01: PASS
+  P2-G02: PASS
+  P2-G03: PASS
+  P2-G04: PASS
+  P2-G05: PASS
+  P2-G06: PASS
+
+scope:
+  reduced_gate_smoke: PASS
+  roadmap_10000_step_smoke: PASS
+  official_full_config_training: PENDING
+
+evidence:
+  acceptance: acceptance.md
+  failures: failures.md
+  validation: tests/smoke_acceptance_20260725.json
+  official_smoke_validation: tests/official_smoke_acceptance_20260725_run2.json
+  official_smoke_status: official_upstream_10000_20260725_run2/run_status.json
+  official_pytest: tests/pytest_official_20260727.txt
+  official_ruff: tests/ruff_official_20260727.txt
+  official_ruff_format: tests/ruff_format_official_20260727.txt
+  official_powershell_syntax: tests/powershell_syntax_official_20260727.txt
+  official_manifest_yaml: tests/manifest_yaml_official_20260727.txt
+  pytest: tests/pytest_20260725.txt
+  ruff: tests/ruff_20260725.txt
+  ruff_format: tests/ruff_format_20260725.txt
+  powershell_syntax: tests/powershell_syntax_20260725.txt
+  manifest_yaml: tests/manifest_yaml_20260725.txt
+  required_files: tests/required_files_20260725.txt
+  sha256: tests/sha256.csv

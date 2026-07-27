@@ -1,0 +1,9 @@
+{"step": 68, "episode/score": -7.640493869781494, "episode/length": 17.0}
+{"step": 134, "episode/score": 11.16038703918457, "episode/length": 33.0}
+{"step": 151, "episode/score": 7.598328590393066, "episode/length": 38.0}
+{"step": 163, "episode/score": 17.38323974609375, "episode/length": 41.0}
+{"step": 204, "episode/score": 5.875731945037842, "episode/length": 34.0}
+{"step": 226, "episode/score": -1.887948989868164, "episode/length": 23.0}
+{"step": 266, "train/opt/updates": 0.0, "fps/fps": 0}
+{"step": 288, "episode/score": 7.6142497062683105, "episode/length": 31.0}
+{"step": 304, "episode/score": -5.9514617919921875, "episode/length": 19.0}

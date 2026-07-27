@@ -1,0 +1,16 @@
+﻿{
+    "pid":  27936,
+    "started_at":  "2026-07-25T21:35:44.2194323+08:00",
+    "run_root":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p2_official_proprio\\official_upstream_10000_20260725_run2",
+    "profile":  "ROADMAP_OFFICIAL_10K",
+    "command":  [
+                    "D:\\Anaconda\\envs\\isaaclab\\python.exe",
+                    "D:\\Software\\R2-Dreamer\\train.py",
+                    "env=isaaclab_proprio",
+                    "model.rep_loss=r2dreamer",
+                    "env.steps=10000",
+                    "env.env_num=4",
+                    "model.compile=false",
+                    "logdir=D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p2_official_proprio\\official_upstream_10000_20260725_run2"
+                ]
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-07-27T13:43:49.933003+08:00",
+  "run_root": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p2_official_proprio\\official_upstream_10000_20260725_run2",
+  "completion_semantics": "latest.pt is written by frozen upstream train.py only after OnlineTrainer.begin returns at configured env.steps",
+  "config": {
+    "steps": 10000,
+    "env_num": 4,
+    "train_ratio": 512,
+    "batch_size": 16,
+    "batch_length": 64,
+    "rep_loss": "r2dreamer",
+    "compile": false,
+    "log_grads": false,
+    "deter": 2048,
+    "hidden": 256,
+    "discrete": 16,
+    "units": 256
+  },
+  "metrics": {
+    "rows": 111,
+    "max_logged_step": 9919,
+    "note": "Upstream logger has no unconditional final-step write.",
+    "training_rows": 1,
+    "episode_rows": 109,
+    "last_logged_updates": 2500.0,
+    "last_logged_loss": 7.370016098022461,
+    "initial_episode_score_mean": 2.741208219528198,
+    "final_episode_score_mean": 266.9581604003906,
+    "last_episode_score": 292.9211120605469
+  },
+  "checkpoint": {
+    "path": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p2_official_proprio\\official_upstream_10000_20260725_run2\\latest.pt",
+    "bytes": 118582504,
+    "agent_tensors": 160,
+    "optimizer_tensors": 276,
+    "agent_digest": "848360840a02665b37c72003170d014d7284d6cd4880b81b48e9503ac170625c"
+  },
+  "checks": {
+    "official_state_config": true,
+    "windows_compile_override_only": true,
+    "training_loop_completed": true,
+    "training_metrics_present": true,
+    "episode_metrics_present": true,
+    "metrics_finite": true,
+    "agent_checkpoint_finite": true,
+    "optimizer_checkpoint_finite": true,
+    "traceback_absent": true,
+    "cuda_oom_absent": true
+  },
+  "pass": true
+}

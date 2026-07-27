@@ -1,0 +1,594 @@
+{
+  "schema_version": 1,
+  "completed_at": "2026-07-25T20:58:26.077354+08:00",
+  "r2dreamer": {
+    "root": "D:\\Software\\R2-Dreamer",
+    "commit": "546e4fab8146ea4b14e1d7726bbc1a8a1d50322f",
+    "dirty": false
+  },
+  "config": {
+    "env": {
+      "task": "isaaclab_Isaac-Cartpole-Direct-v0",
+      "steps": 240,
+      "env_num": 4,
+      "eval_episode_num": 0,
+      "action_repeat": 1,
+      "train_ratio": 4,
+      "headless": true,
+      "seed": 0,
+      "device": "cuda:0",
+      "size": [
+        64,
+        64
+      ],
+      "encoder": {
+        "mlp_keys": "policy",
+        "cnn_keys": "$^"
+      },
+      "decoder": {
+        "mlp_keys": "policy",
+        "cnn_keys": "$^"
+      }
+    },
+    "model": {
+      "act_entropy": 0.0003,
+      "kl_free": 1.0,
+      "imag_horizon": 5,
+      "horizon": 333,
+      "lamb": 0.95,
+      "compile": false,
+      "log_grads": true,
+      "device": "cuda:0",
+      "rep_loss": "r2dreamer",
+      "lr": 4e-05,
+      "agc": 0.3,
+      "pmin": 0.001,
+      "eps": 1e-20,
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "warmup": 1000,
+      "slow_target_update": 1,
+      "slow_target_fraction": 0.02,
+      "loss_scales": {
+        "barlow": 0.05,
+        "infonce": 1.0,
+        "recon": 1.0,
+        "rew": 1.0,
+        "con": 1.0,
+        "dyn": 1.0,
+        "rep": 0.1,
+        "policy": 1.0,
+        "value": 1.0,
+        "repval": 0.3,
+        "swav": 1.0,
+        "temp": 1.0,
+        "norm": 1.0
+      },
+      "r2dreamer": {
+        "lambd": 0.0005
+      },
+      "dreamer_pro": {
+        "warm_up": 1,
+        "num_prototypes": 2500,
+        "proto_dim": 32,
+        "temperature": 0.1,
+        "sinkhorn_eps": 0.05,
+        "sinkhorn_iters": 3,
+        "ema_update_every": 1,
+        "ema_update_fraction": 0.05,
+        "freeze_prototypes_iters": 10000,
+        "aug": {
+          "max_delta": 3.0,
+          "same_across_time": true,
+          "bilinear": true
+        }
+      },
+      "rssm": {
+        "stoch": 32,
+        "deter": 128,
+        "hidden": 64,
+        "discrete": 8,
+        "img_layers": 2,
+        "obs_layers": 1,
+        "dyn_layers": 1,
+        "blocks": 8,
+        "act": "SiLU",
+        "norm": true,
+        "unimix_ratio": 0.01,
+        "initial": "learned",
+        "device": "cuda:0"
+      },
+      "encoder": {
+        "mlp_keys": "policy",
+        "cnn_keys": "$^",
+        "mlp": {
+          "shape": null,
+          "layers": 3,
+          "units": 64,
+          "act": "SiLU",
+          "norm": true,
+          "device": "cuda:0",
+          "outscale": null,
+          "symlog_inputs": true,
+          "name": "mlp_encoder"
+        },
+        "cnn": {
+          "act": "SiLU",
+          "norm": true,
+          "kernel_size": 5,
+          "minres": 4,
+          "depth": 16,
+          "mults": [
+            2,
+            3,
+            4,
+            4
+          ]
+        }
+      },
+      "decoder": {
+        "mlp_keys": "policy",
+        "cnn_keys": "$^",
+        "mlp_dist": {
+          "name": "symlog_mse"
+        },
+        "cnn_dist": {
+          "name": "mse"
+        },
+        "mlp": {
+          "shape": null,
+          "layers": 3,
+          "units": 64,
+          "act": "SiLU",
+          "norm": true,
+          "dist": {
+            "name": "identity"
+          },
+          "device": "cuda:0",
+          "outscale": 1.0,
+          "symlog_inputs": false,
+          "name": "mlp_decoder"
+        },
+        "cnn": {
+          "depth": 16,
+          "units": 64,
+          "bspace": 8,
+          "mults": [
+            2,
+            3,
+            4,
+            4
+          ],
+          "act": "SiLU",
+          "norm": true,
+          "kernel_size": 5,
+          "minres": 4,
+          "outscale": 1.0
+        }
+      },
+      "reward": {
+        "shape": [
+          255
+        ],
+        "layers": 1,
+        "units": 64,
+        "act": "SiLU",
+        "norm": true,
+        "dist": {
+          "name": "symexp_twohot",
+          "bin_num": 255
+        },
+        "outscale": 0.0,
+        "device": "cuda:0",
+        "symlog_inputs": false,
+        "name": "reward"
+      },
+      "cont": {
+        "shape": [
+          1
+        ],
+        "layers": 1,
+        "units": 64,
+        "act": "SiLU",
+        "norm": true,
+        "dist": {
+          "name": "binary"
+        },
+        "outscale": 1.0,
+        "device": "cuda:0",
+        "symlog_inputs": false,
+        "name": "cont"
+      },
+      "actor": {
+        "shape": [
+          1
+        ],
+        "layers": 3,
+        "units": 64,
+        "act": "SiLU",
+        "norm": true,
+        "device": "cuda:0",
+        "dist": {
+          "name": "bounded_normal",
+          "min_std": 0.1,
+          "max_std": 1.0
+        },
+        "outscale": 0.01,
+        "symlog_inputs": false,
+        "name": "actor"
+      },
+      "critic": {
+        "shape": [
+          255
+        ],
+        "layers": 3,
+        "units": 64,
+        "act": "SiLU",
+        "norm": true,
+        "device": "cuda:0",
+        "dist": {
+          "name": "symexp_twohot",
+          "bin_num": 255
+        },
+        "outscale": 0.0,
+        "symlog_inputs": false,
+        "name": "value"
+      },
+      "deter": 128,
+      "hidden": 64,
+      "discrete": 8,
+      "depth": 16,
+      "units": 64,
+      "act": "SiLU",
+      "norm": true
+    },
+    "logdir": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p2_official_proprio\\smoke_resume_20260725",
+    "seed": 0,
+    "deterministic_run": false,
+    "device": "cuda:0",
+    "batch_size": 2,
+    "batch_length": 8,
+    "buffer": {
+      "batch_size": 2,
+      "batch_length": 8,
+      "max_size": 500000.0,
+      "device": "cuda:0",
+      "storage_device": "cuda:0"
+    },
+    "trainer": {
+      "steps": 240,
+      "pretrain": 0,
+      "eval_every": 10000.0,
+      "eval_episode_num": 0,
+      "batch_size": 2,
+      "batch_length": 8,
+      "train_ratio": 4,
+      "video_pred_log": false,
+      "params_hist_log": false,
+      "update_log_every": 64,
+      "action_repeat": 1
+    }
+  },
+  "numerical_mode": "float32_updates_no_grad_scaling",
+  "resume": {
+    "requested": true,
+    "loaded": true,
+    "source": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p2_official_proprio\\checkpoints\\smoke_initial_20260725.pt",
+    "source_agent_digest": "c775a4e085b74d69d7ddd36e4bc5c942c3d44eba458c7672b1a90feca3a89f3d",
+    "loaded_agent_digest": "c775a4e085b74d69d7ddd36e4bc5c942c3d44eba458c7672b1a90feca3a89f3d",
+    "source_completed_env_steps": 320,
+    "source_update_count": 70
+  },
+  "completed_env_steps": 242,
+  "episode_count": 6,
+  "skipped_updates_no_sequence": 0,
+  "replay": {
+    "samples": 50,
+    "sample_shapes": [
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        2,
+        8
+      ]
+    ],
+    "episode_constant_per_sequence": true,
+    "no_internal_is_first": true,
+    "time_index_contiguous": true
+  },
+  "latents": {
+    "observations": 50,
+    "finite": true
+  },
+  "gradients": {
+    "observations": 50,
+    "finite": true,
+    "norm_min": 59.504005526867246,
+    "norm_max": 99.26790427797692
+  },
+  "updates": {
+    "count": 50,
+    "metrics_finite": true,
+    "metric_names": [
+      "action_entropy",
+      "action_max",
+      "action_mean",
+      "action_min",
+      "action_std",
+      "adv",
+      "adv_std",
+      "con",
+      "dyn_entropy",
+      "loss/barlow",
+      "loss/con",
+      "loss/dyn",
+      "loss/policy",
+      "loss/rep",
+      "loss/repval",
+      "loss/rew",
+      "loss/value",
+      "opt/grad_norm",
+      "opt/grad_rms",
+      "opt/grad_scale",
+      "opt/loss",
+      "opt/lr",
+      "opt/param_rms",
+      "opt/update_rms",
+      "rep_entropy",
+      "ret",
+      "ret_005",
+      "ret_095",
+      "ret_replay_max",
+      "ret_replay_mean",
+      "ret_replay_min",
+      "ret_replay_std",
+      "rew",
+      "slow_value_replay_max",
+      "slow_value_replay_mean",
+      "slow_value_replay_min",
+      "slow_value_replay_std",
+      "slowval",
+      "tar",
+      "val",
+      "value_replay_max",
+      "value_replay_mean",
+      "value_replay_min",
+      "value_replay_std",
+      "weight"
+    ],
+    "modules": {
+      "rssm": {
+        "changed": true,
+        "changed_tensors": 27,
+        "delta_l2": 0.010711164038259098,
+        "delta_max_abs": 7.900041237007827e-05
+      },
+      "reward": {
+        "changed": true,
+        "changed_tensors": 5,
+        "delta_l2": 0.014842281288429925,
+        "delta_max_abs": 0.00011213868856430054
+      },
+      "cont": {
+        "changed": true,
+        "changed_tensors": 5,
+        "delta_l2": 0.006205667001065932,
+        "delta_max_abs": 6.431341171264648e-05
+      },
+      "actor": {
+        "changed": true,
+        "changed_tensors": 11,
+        "delta_l2": 0.004611497043558409,
+        "delta_max_abs": 6.263703107833862e-05
+      },
+      "value": {
+        "changed": true,
+        "changed_tensors": 11,
+        "delta_l2": 0.015805420152289373,
+        "delta_max_abs": 0.0001123407855629921
+      }
+    }
+  },
+  "actions": {
+    "count": 252,
+    "min": -1.0,
+    "max": 1.0,
+    "mean": 0.01665897129310502,
+    "std": 0.668267924655083,
+    "finite": true
+  }
+}

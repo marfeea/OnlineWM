@@ -1,0 +1,6 @@
+﻿{
+    "status":  "ABORTED_RESTART_WITH_OFFICIAL_LOG_GRADS_DEFAULT",
+    "pid":  29460,
+    "stopped_at":  "2026-07-25T21:35:23.4884535+08:00",
+    "reason":  "model.log_grads=true is diagnostic overhead and is not part of the roadmap official smoke command"
+}
