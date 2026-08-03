@@ -1,0 +1,8 @@
+command: ruff check scripts\p3 tests\test_p3_runtime.py tests\test_p3_acceptance.py
+result: PASS
+output: All checks passed!
+
+command: ruff format --check scripts\p3 tests\test_p3_runtime.py tests\test_p3_acceptance.py
+result: PASS
+output: 5 files already formatted
+

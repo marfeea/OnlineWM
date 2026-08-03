@@ -1,0 +1,30 @@
+﻿{
+    "schema_version":  1,
+    "run_id":  "gate_20260728",
+    "completed_at":  "2026-07-28T14:15:56.7194874+08:00",
+    "profile":  "reduced_gate_smoke",
+    "official_environment":  "isaaclab_vision",
+    "official_task":  "isaaclab_Isaac-Cartpole-RGB-Camera-Direct-v0",
+    "representation_loss":  "r2dreamer",
+    "python_executable":  "D:\\Anaconda\\envs\\isaaclab\\python.exe",
+    "python_no_user_site":  true,
+    "r2dreamer_root":  "D:\\Software\\R2-Dreamer",
+    "initial_steps":  96,
+    "resume_steps":  80,
+    "num_envs":  2,
+    "batch_size":  2,
+    "batch_length":  4,
+    "train_ratio":  2,
+    "policy_steps":  48,
+    "numerical_mode":  "float32_updates_no_grad_scaling",
+    "strict_episode_replay":  true,
+    "action_clipping":  [
+                            -1,
+                            1
+                        ],
+    "initial_checkpoint":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\checkpoints\\smoke_initial_gate_20260728.pt",
+    "resume_checkpoint":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\checkpoints\\smoke_resume_gate_20260728.pt",
+    "initial_policy_video":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\videos\\fixed_policy_initial_gate_20260728.mp4",
+    "resume_policy_video":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\videos\\fixed_policy_resume_gate_20260728.mp4",
+    "validation":  "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\tests\\smoke_acceptance_gate_20260728.json"
+}

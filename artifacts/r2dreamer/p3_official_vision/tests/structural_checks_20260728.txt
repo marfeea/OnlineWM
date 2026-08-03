@@ -1,0 +1,4 @@
+PowerShell syntax: PASS
+manifest YAML parse: PASS
+core evidence SHA256: PASS (6 files)
+

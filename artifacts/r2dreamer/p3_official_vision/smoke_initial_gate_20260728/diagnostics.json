@@ -1,0 +1,423 @@
+{
+  "schema_version": 1,
+  "completed_at": "2026-07-28T14:15:22.449432+08:00",
+  "r2dreamer": {
+    "root": "D:\\Software\\R2-Dreamer",
+    "commit": "546e4fab8146ea4b14e1d7726bbc1a8a1d50322f",
+    "dirty": false
+  },
+  "config": {
+    "env": {
+      "task": "isaaclab_Isaac-Cartpole-RGB-Camera-Direct-v0",
+      "steps": 96,
+      "env_num": 2,
+      "eval_episode_num": 0,
+      "action_repeat": 1,
+      "train_ratio": 2,
+      "headless": true,
+      "seed": 0,
+      "device": "cuda:0",
+      "size": [
+        64,
+        64
+      ],
+      "encoder": {
+        "mlp_keys": "$^",
+        "cnn_keys": "image"
+      },
+      "decoder": {
+        "mlp_keys": "$^",
+        "cnn_keys": "image"
+      }
+    },
+    "model": {
+      "act_entropy": 0.0003,
+      "kl_free": 1.0,
+      "imag_horizon": 3,
+      "horizon": 333,
+      "lamb": 0.95,
+      "compile": false,
+      "log_grads": true,
+      "device": "cuda:0",
+      "rep_loss": "r2dreamer",
+      "lr": 4e-05,
+      "agc": 0.3,
+      "pmin": 0.001,
+      "eps": 1e-20,
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "warmup": 1000,
+      "slow_target_update": 1,
+      "slow_target_fraction": 0.02,
+      "loss_scales": {
+        "barlow": 0.05,
+        "infonce": 1.0,
+        "recon": 1.0,
+        "rew": 1.0,
+        "con": 1.0,
+        "dyn": 1.0,
+        "rep": 0.1,
+        "policy": 1.0,
+        "value": 1.0,
+        "repval": 0.3,
+        "swav": 1.0,
+        "temp": 1.0,
+        "norm": 1.0
+      },
+      "r2dreamer": {
+        "lambd": 0.0005
+      },
+      "dreamer_pro": {
+        "warm_up": 1,
+        "num_prototypes": 2500,
+        "proto_dim": 32,
+        "temperature": 0.1,
+        "sinkhorn_eps": 0.05,
+        "sinkhorn_iters": 3,
+        "ema_update_every": 1,
+        "ema_update_fraction": 0.05,
+        "freeze_prototypes_iters": 10000,
+        "aug": {
+          "max_delta": 3.0,
+          "same_across_time": true,
+          "bilinear": true
+        }
+      },
+      "rssm": {
+        "stoch": 32,
+        "deter": 64,
+        "hidden": 32,
+        "discrete": 4,
+        "img_layers": 2,
+        "obs_layers": 1,
+        "dyn_layers": 1,
+        "blocks": 4,
+        "act": "SiLU",
+        "norm": true,
+        "unimix_ratio": 0.01,
+        "initial": "learned",
+        "device": "cuda:0"
+      },
+      "encoder": {
+        "mlp_keys": "$^",
+        "cnn_keys": "image",
+        "mlp": {
+          "shape": null,
+          "layers": 3,
+          "units": 32,
+          "act": "SiLU",
+          "norm": true,
+          "device": "cuda:0",
+          "outscale": null,
+          "symlog_inputs": true,
+          "name": "mlp_encoder"
+        },
+        "cnn": {
+          "act": "SiLU",
+          "norm": true,
+          "kernel_size": 5,
+          "minres": 4,
+          "depth": 8,
+          "mults": [
+            2,
+            3,
+            4,
+            4
+          ]
+        }
+      },
+      "decoder": {
+        "mlp_keys": "$^",
+        "cnn_keys": "image",
+        "mlp_dist": {
+          "name": "symlog_mse"
+        },
+        "cnn_dist": {
+          "name": "mse"
+        },
+        "mlp": {
+          "shape": null,
+          "layers": 3,
+          "units": 32,
+          "act": "SiLU",
+          "norm": true,
+          "dist": {
+            "name": "identity"
+          },
+          "device": "cuda:0",
+          "outscale": 1.0,
+          "symlog_inputs": false,
+          "name": "mlp_decoder"
+        },
+        "cnn": {
+          "depth": 8,
+          "units": 32,
+          "bspace": 8,
+          "mults": [
+            2,
+            3,
+            4,
+            4
+          ],
+          "act": "SiLU",
+          "norm": true,
+          "kernel_size": 5,
+          "minres": 4,
+          "outscale": 1.0
+        }
+      },
+      "reward": {
+        "shape": [
+          255
+        ],
+        "layers": 1,
+        "units": 32,
+        "act": "SiLU",
+        "norm": true,
+        "dist": {
+          "name": "symexp_twohot",
+          "bin_num": 255
+        },
+        "outscale": 0.0,
+        "device": "cuda:0",
+        "symlog_inputs": false,
+        "name": "reward"
+      },
+      "cont": {
+        "shape": [
+          1
+        ],
+        "layers": 1,
+        "units": 32,
+        "act": "SiLU",
+        "norm": true,
+        "dist": {
+          "name": "binary"
+        },
+        "outscale": 1.0,
+        "device": "cuda:0",
+        "symlog_inputs": false,
+        "name": "cont"
+      },
+      "actor": {
+        "shape": [
+          1
+        ],
+        "layers": 3,
+        "units": 32,
+        "act": "SiLU",
+        "norm": true,
+        "device": "cuda:0",
+        "dist": {
+          "name": "bounded_normal",
+          "min_std": 0.1,
+          "max_std": 1.0
+        },
+        "outscale": 0.01,
+        "symlog_inputs": false,
+        "name": "actor"
+      },
+      "critic": {
+        "shape": [
+          255
+        ],
+        "layers": 3,
+        "units": 32,
+        "act": "SiLU",
+        "norm": true,
+        "device": "cuda:0",
+        "dist": {
+          "name": "symexp_twohot",
+          "bin_num": 255
+        },
+        "outscale": 0.0,
+        "symlog_inputs": false,
+        "name": "value"
+      },
+      "deter": 64,
+      "hidden": 32,
+      "discrete": 4,
+      "depth": 8,
+      "units": 32,
+      "act": "SiLU",
+      "norm": true
+    },
+    "logdir": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\smoke_initial_gate_20260728",
+    "seed": 0,
+    "deterministic_run": false,
+    "device": "cuda:0",
+    "batch_size": 2,
+    "batch_length": 4,
+    "buffer": {
+      "batch_size": 2,
+      "batch_length": 4,
+      "max_size": 500000.0,
+      "device": "cuda:0",
+      "storage_device": "cuda:0"
+    },
+    "trainer": {
+      "steps": 96,
+      "pretrain": 0,
+      "eval_every": 10000.0,
+      "eval_episode_num": 0,
+      "batch_size": 2,
+      "batch_length": 4,
+      "train_ratio": 2,
+      "video_pred_log": false,
+      "params_hist_log": false,
+      "update_log_every": 8,
+      "action_repeat": 1
+    }
+  },
+  "numerical_mode": "float32_updates_no_grad_scaling",
+  "resume": {
+    "requested": false,
+    "loaded": false
+  },
+  "completed_env_steps": 96,
+  "episode_count": 2,
+  "skipped_updates_no_sequence": 0,
+  "rgb_samples": [
+    "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\rgb_samples\\initial_gate_20260728\\initial.png",
+    "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\rgb_samples\\initial_gate_20260728\\terminal.png",
+    "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\rgb_samples\\initial_gate_20260728\\reset.png"
+  ],
+  "fixed_policy": {
+    "path": "D:\\Project\\S2R\\OnlineWM\\OnlineWM\\artifacts\\r2dreamer\\p3_official_vision\\videos\\fixed_policy_initial_gate_20260728.mp4",
+    "frames": 48,
+    "bytes": 3229,
+    "action_min": -0.01616479456424713,
+    "action_max": 0.002019205130636692,
+    "action_std": 0.004236071370542049
+  },
+  "images": {
+    "observations": 98,
+    "shape": [
+      2,
+      64,
+      64,
+      3
+    ],
+    "shape_stable": true,
+    "dtype": "torch.uint8",
+    "dtype_stable": true,
+    "rgb_batch": true,
+    "range_valid": true,
+    "min": 146.0,
+    "max": 240.0
+  },
+  "episode_semantics": {
+    "observations": 98,
+    "is_first_matches_previous_done": true,
+    "is_last_matches_step_done": true,
+    "terminal_implies_last": true,
+    "reset_reward_zero": true,
+    "reset_frames": 7,
+    "terminal_frames": 3
+  },
+  "r2_loss": {
+    "observations": 21,
+    "finite": true,
+    "min": 553.912353515625,
+    "max": 614.2713623046875,
+    "last": 590.7443237304688
+  },
+  "gradients": {
+    "encoder": {
+      "observations": 21,
+      "finite": true,
+      "norm_min": 6.340903760656737,
+      "norm_max": 15.741276013701118
+    },
+    "rssm": {
+      "observations": 21,
+      "finite": true,
+      "norm_min": 18.475039424129484,
+      "norm_max": 69.95388408937711
+    }
+  },
+  "updates": {
+    "count": 21,
+    "metrics_finite": true,
+    "metric_names": [
+      "action_entropy",
+      "action_max",
+      "action_mean",
+      "action_min",
+      "action_std",
+      "adv",
+      "adv_std",
+      "con",
+      "dyn_entropy",
+      "loss/barlow",
+      "loss/con",
+      "loss/dyn",
+      "loss/policy",
+      "loss/rep",
+      "loss/repval",
+      "loss/rew",
+      "loss/value",
+      "opt/grad_norm",
+      "opt/grad_rms",
+      "opt/grad_scale",
+      "opt/loss",
+      "opt/lr",
+      "opt/param_rms",
+      "opt/update_rms",
+      "rep_entropy",
+      "ret",
+      "ret_005",
+      "ret_095",
+      "ret_replay_max",
+      "ret_replay_mean",
+      "ret_replay_min",
+      "ret_replay_std",
+      "rew",
+      "slow_value_replay_max",
+      "slow_value_replay_mean",
+      "slow_value_replay_min",
+      "slow_value_replay_std",
+      "slowval",
+      "tar",
+      "val",
+      "value_replay_max",
+      "value_replay_mean",
+      "value_replay_min",
+      "value_replay_std",
+      "weight"
+    ],
+    "modules": {
+      "encoder": {
+        "changed": true,
+        "changed_tensors": 12,
+        "delta_l2": 0.0014768711510248069,
+        "delta_max_abs": 1.1536292731761932e-05
+      },
+      "rssm": {
+        "changed": true,
+        "changed_tensors": 27,
+        "delta_l2": 0.0013331396172652098,
+        "delta_max_abs": 1.2818723917007446e-05
+      }
+    }
+  },
+  "actions": {
+    "count": 100,
+    "min": -1.0,
+    "max": 1.0,
+    "mean": -0.036603492349386216,
+    "std": 0.6586243601609922,
+    "finite": true
+  },
+  "performance": {
+    "environment_steps": 189,
+    "environment_seconds": 2.2172963987104595,
+    "environment_fps": 85.23894239395287,
+    "training_updates": 21,
+    "training_seconds": 2.6995468004606664,
+    "training_updates_per_second": 7.7790835100234,
+    "training_fps": 62.2326680801872,
+    "wall_seconds": 27.871999400202185,
+    "peak_cuda_bytes": 6588014080
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-07-28T14:15:56.708965+08:00",
+  "gates": {
+    "P3-G01": true,
+    "P3-G02": true,
+    "P3-G03": true,
+    "P3-G04": true,
+    "P3-G05": true,
+    "P3-G06": true,
+    "P3-G07": true
+  },
+  "console_checks": {
+    "initial_console_clean": true,
+    "resume_console_clean": true
+  },
+  "pass": true
+}

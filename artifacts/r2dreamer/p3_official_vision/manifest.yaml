@@ -1,0 +1,102 @@
+schema_version: 1
+phase: P3
+status: IN_PROGRESS
+status_reason: >-
+  The upstream-native vision preflight completed and the reduced P3-G01 through
+  P3-G07 gate smoke passed. The roadmap 20,000-step official smoke and the
+  full 1.01M-budget training remain pending.
+collected_at: "2026-07-28T14:15:56+08:00"
+
+repositories:
+  onlinewm:
+    root: "D:\\Project\\S2R\\OnlineWM\\OnlineWM"
+    baseline_commit: "45079b0f50fac000708ce4714efa0b33950c3435"
+    dirty_during_acceptance: true
+  r2dreamer:
+    root: "D:\\Software\\R2-Dreamer"
+    commit: "546e4fab8146ea4b14e1d7726bbc1a8a1d50322f"
+    dirty_during_acceptance: false
+
+runtime:
+  python: "D:\\Anaconda\\envs\\isaaclab\\python.exe"
+  python_no_user_site: true
+  device: "cuda:0"
+  gpu: "NVIDIA GeForce RTX 4060"
+  image_shape: [64, 64, 3]
+  image_dtype: uint8
+
+official_native_preflight:
+  command_profile: upstream_train_py_isaaclab_vision_r2dreamer
+  logdir: official_preflight_20260728_run2
+  configured_env_steps: 80
+  env_num: 2
+  checkpoint: official_preflight_20260728_run2/latest.pt
+  checkpoint_bytes: 3122637
+  process_completed: true
+  gate_result: FAIL
+  gate_failure_reason: >-
+    Upstream AMP emitted non-finite Barlow loss/gradients during warm-up and
+    the continuous action distribution emitted values outside [-1, 1].
+
+accepted_gate_runs:
+  initial:
+    logdir: smoke_initial_gate_20260728
+    env_steps: 96
+    updates: 21
+    image_observations: 98
+    terminal_frames: 3
+    r2_loss_range: [553.912353515625, 614.2713623046875]
+    environment_fps: 85.23894239395287
+    training_fps: 62.2326680801872
+    peak_cuda_bytes: 6588014080
+    checkpoint: checkpoints/smoke_initial_gate_20260728.pt
+  resume:
+    logdir: smoke_resume_gate_20260728
+    env_steps: 81
+    updates: 17
+    image_observations: 90
+    terminal_frames: 1
+    r2_loss_range: [548.2449951171875, 611.1119995117188]
+    environment_fps: 79.34942542573603
+    training_fps: 66.367013085487
+    peak_cuda_bytes: 6589090816
+    checkpoint: checkpoints/smoke_resume_gate_20260728.pt
+
+adapters:
+  full_precision_updates: true
+  grad_scaling: false
+  strict_episode_replay: true
+  action_clip: [-1.0, 1.0]
+  checkpoint_agent_and_optimizer: true
+  fixed_policy_eval_mode: true
+
+gates:
+  P3-G01: PASS
+  P3-G02: PASS
+  P3-G03: PASS
+  P3-G04: PASS
+  P3-G05: PASS
+  P3-G06: PASS
+  P3-G07: PASS
+
+scope:
+  upstream_native_preflight: COMPLETED_WITH_GATE_FAILURES
+  reduced_gate_smoke: PASS
+  roadmap_20000_step_smoke: PENDING
+  official_full_config_training: PENDING
+
+evidence:
+  acceptance: acceptance.md
+  failures: failures.md
+  validation: tests/smoke_acceptance_gate_20260728.json
+  pytest: tests/pytest_20260728.txt
+  ruff: tests/ruff_20260728.txt
+  structural_checks: tests/structural_checks_20260728.txt
+  run_config: configs/run_gate_20260728.json
+  initial_diagnostics: smoke_initial_gate_20260728/diagnostics.json
+  resume_diagnostics: smoke_resume_gate_20260728/diagnostics.json
+  initial_rgb: rgb_samples/initial_gate_20260728/
+  resume_rgb: rgb_samples/resume_gate_20260728/
+  initial_fixed_policy_video: videos/fixed_policy_initial_gate_20260728.mp4
+  resume_fixed_policy_video: videos/fixed_policy_resume_gate_20260728.mp4
+  sha256: tests/sha256.csv

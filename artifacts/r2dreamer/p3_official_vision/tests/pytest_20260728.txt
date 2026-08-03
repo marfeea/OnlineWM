@@ -1,0 +1,6 @@
+command: D:\Anaconda\envs\isaaclab\python.exe -m pytest -q --basetemp=tmp\pytest_p3_full
+result: PASS
+output:
+..............                                                           [100%]
+14 passed in 2.92s
+
